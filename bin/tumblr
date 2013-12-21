@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+require "pp"
+require "pathname"
+require "yaml"
+
+require "thor"
+
+require_relative "../lib/video"
+
+# debug
+require "tapp"
+
+class TumblerCLI < Thor
+  desc "list [PATTERN]", "list video ids"
+  def list(pattern = ".")
+    puts Video.ids.grep(/#{pattern}/).join("\n")
+  end
+
+  desc "show ID", "show description of video with id"
+  def show(id)
+    pp Video.new(id)
+  end
+
+  desc "post ID", "create or update tumblr about video with id"
+  def post(id)
+
+  end
+end
+
+TumblerCLI.start
