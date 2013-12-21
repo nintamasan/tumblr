@@ -13,6 +13,7 @@ class Part
     self.class.attributes.each do |attr|
       self.instance_variable_set(:"@#{attr}", info[attr])
     end
+
     if self.tags
       self.tags = self.tags.dup # to avoid corruption
     else

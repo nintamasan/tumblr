@@ -26,21 +26,10 @@ class TumblerCLI < Thor
   def post(id)
     video = Video.new(id)
 
-    video.parts.each do |part|
-      # TODO: exception handle
-      if part.id
-        response = tumblr.edit(my_tumblr_host, part.tumblr_param.merge(id: part.id))
+    video.parts.each {|part| create_or_update_post(:video, part) }
+    create_or_update_post(:photo, video.image)
 
-        puts "updated http://#{my_tumblr_host}/post/#{part.id}"
-      else
-        response = tumblr.video(my_tumblr_host, part.tumblr_param)
-
-        part.id = response["id"]
-        puts "saved at http://#{my_tumblr_host}/post/#{part.id}"
-      end
-    end
-
-    video.update_part_id!
+    video.update_info!
     puts "all posted view it at http://#{my_tumblr_host}/search/#{video.id}"
   end
 
@@ -60,6 +49,20 @@ class TumblerCLI < Thor
       @tumblr = Tumblr::Client.new
     end
     @tumblr
+  end
+
+  def create_or_update_post(type, item)
+    if item.id
+      response = tumblr.edit(my_tumblr_host, item.tumblr_param.merge(id: item.id))
+
+      puts "updated http://#{my_tumblr_host}/post/#{item.id}"
+    else
+      item.tumblr_param
+      response = tumblr.send(type, my_tumblr_host, item.tumblr_param)
+
+      item.id = response["id"]
+      puts "saved at http://#{my_tumblr_host}/post/#{item.id}"
+    end
   end
 end
 

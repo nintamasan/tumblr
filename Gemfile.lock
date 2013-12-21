@@ -1,3 +1,16 @@
+GIT
+  remote: git://github.com/tumblr/tumblr_client.git
+  revision: 9cffd49b2308392012f0f4d811244455fa8703f0
+  branch: i24
+  specs:
+    tumblr_client (0.8.2)
+      faraday (>= 0.8)
+      faraday_middleware (>= 0.8)
+      json
+      mime-types
+      oauth
+      simple_oauth
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -14,13 +27,6 @@ GEM
     tapp (1.4.0)
       thor
     thor (0.17.0)
-    tumblr_client (0.8.2)
-      faraday (>= 0.8)
-      faraday_middleware (>= 0.8)
-      json
-      mime-types
-      oauth
-      simple_oauth
 
 PLATFORMS
   ruby
@@ -29,4 +35,4 @@ DEPENDENCIES
   facets
   tapp
   thor
-  tumblr_client
+  tumblr_client!

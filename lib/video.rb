@@ -1,6 +1,7 @@
 require "yaml"
 
 require_relative "part"
+require_relative "image"
 
 class Video
   class << self
@@ -51,6 +52,14 @@ class Video
     config["title"]
   end
 
+  def image
+    unless @image
+      @image = Image.new(config["image"].merge("title" => title))
+      @image.tags.push(id)
+    end
+    @image
+  end
+
   def parts
     unless @parts
       @parts = config["parts"].map {|part| Part.new(part.merge("title" => title)) }
@@ -65,12 +74,14 @@ class Video
     @parts
   end
 
-  def update_part_id!
+  def update_info!
     config = Marshal.load(Marshal.dump(self.config))
 
     config["parts"].zip(parts).each do |original, part|
       original["id"] = part.id
     end
+
+    config["image"]["id"] = image.id
 
     File.open(@config_file, "w") do |file|
       file << config.to_yaml
