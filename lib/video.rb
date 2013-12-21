@@ -35,7 +35,7 @@ class Video
 
   def inspect
     [ "#{id}: #{title}",
-      parts.map {|part| "  #{part.name}" }
+      parts.map {|part| "  #{part.name} (#{part.tags.join(",")})" }
     ].join("\n")
   end
 
@@ -53,7 +53,9 @@ class Video
 
   def parts
     unless @parts
-      @parts = config["parts"].map {|part| Part.new(part) }
+      @parts = config["parts"].map {|part| Part.new(part.merge("title" => title)) }
+      @parts.each {|part| part.tags.push(id) }
+
       unless @parts.all? {|part| part.name }
         # title is completed as n/m
         @parts.each.with_index {|part, i| part.name = "#{i.next}/#{parts.size}" }
@@ -61,6 +63,18 @@ class Video
     end
 
     @parts
+  end
+
+  def update_part_id!
+    config = Marshal.load(Marshal.dump(self.config))
+
+    config["parts"].zip(parts).each do |original, part|
+      original["id"] = part.id
+    end
+
+    File.open(@config_file, "w") do |file|
+      file << config.to_yaml
+    end
   end
 
   protected

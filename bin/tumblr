@@ -4,6 +4,7 @@ require "pathname"
 require "yaml"
 
 require "thor"
+require "tumblr_client"
 
 require_relative "../lib/video"
 
@@ -18,12 +19,47 @@ class TumblerCLI < Thor
 
   desc "show ID", "show description of video with id"
   def show(id)
-    pp Video.new(id)
+    p Video.new(id)
   end
 
   desc "post ID", "create or update tumblr about video with id"
   def post(id)
+    video = Video.new(id)
 
+    video.parts.each do |part|
+      # TODO: exception handle
+      if part.id
+        response = tumblr.edit(my_tumblr_host, part.tumblr_param.merge(id: part.id))
+
+        puts "updated http://#{my_tumblr_host}/post/#{part.id}"
+      else
+        response = tumblr.video(my_tumblr_host, part.tumblr_param)
+
+        part.id = response["id"]
+        puts "saved at http://#{my_tumblr_host}/post/#{part.id}"
+      end
+    end
+
+    video.update_part_id!
+    puts "all posted view it at http://#{my_tumblr_host}/search/#{video.id}"
+  end
+
+  protected
+  def my_tumblr_host
+    "av-part.tumblr.com"
+  end
+
+  def tumblr
+    unless @tumblr
+      configuration = YAML.load_file(File.expand_path("~/.tumblr"))
+      Tumblr.configure do |config|
+        Tumblr::Config::VALID_OPTIONS_KEYS.each do |key|
+          config.send(:"#{key}=", configuration[key.to_s])
+        end
+      end
+      @tumblr = Tumblr::Client.new
+    end
+    @tumblr
   end
 end
 
