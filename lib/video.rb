@@ -55,7 +55,7 @@ class Video
   def image
     unless @image
       @image = Image.new(config["image"].merge("title" => title))
-      @image.tags.push(id)
+      @image.tags.push(id, "cover")
     end
     @image
   end

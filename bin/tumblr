@@ -57,7 +57,6 @@ class TumblerCLI < Thor
 
       puts "updated http://#{my_tumblr_host}/post/#{item.id}"
     else
-      item.tumblr_param
       response = tumblr.send(type, my_tumblr_host, item.tumblr_param)
 
       item.id = response["id"]
