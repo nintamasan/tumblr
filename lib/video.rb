@@ -36,7 +36,7 @@ class Video
 
   def inspect
     [ "#{id}: #{title}",
-      parts.map {|part| "  #{part.name} (#{part.tags.join(",")})" }
+      parts.map {|part| "  #{part.url} #{part.name} (#{part.tags.join(",")})" },
     ].join("\n")
   end
 
