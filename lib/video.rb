@@ -11,6 +11,10 @@ class Video
       video
     end
 
+    def create_template(id)
+      video = self.new(id).init!
+    end
+
     def config_path(id)
       "videos/#{id}#{config_suffix}"
     end
@@ -83,13 +87,34 @@ class Video
 
     config["image"]["id"] = image.id
 
-    File.open(@config_file, "w") do |file|
-      file << config.to_yaml
-    end
+    save!
+  end
+
+  def init!(opts = {})
+    @config = {
+      "title" => nil,
+      "image" => {
+        "url" => nil,
+      },
+      "parts" => [
+        {
+          "type" => nil,
+          "movie_id" => nil,
+          "tags" => nil,
+        },
+      ],
+    }
+    save!
   end
 
   protected
   def config
     @config ||= YAML.load_file(@config_file)
+  end
+
+  def save!
+    File.open(@config_file, "w") do |file|
+      file << config.to_yaml
+    end
   end
 end

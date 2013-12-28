@@ -33,6 +33,11 @@ class TumblerCLI < Thor
     puts "all posted view it at http://#{my_tumblr_host}/search/#{video.id}"
   end
 
+  desc "init template", "create template"
+  def template(id)
+    Video.create_template(id)
+  end
+
   protected
   def my_tumblr_host
     "av-part.tumblr.com"
