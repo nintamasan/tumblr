@@ -79,8 +79,6 @@ class Video
   end
 
   def update_info!
-    config = Marshal.load(Marshal.dump(self.config))
-
     config["parts"].zip(parts).each do |original, part|
       original["id"] = part.id
     end

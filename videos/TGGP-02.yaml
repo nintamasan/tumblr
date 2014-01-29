@@ -1,0 +1,29 @@
+---
+title: クイックウーマン
+image:
+  url: http://www.giga-web.jp/db_titles/tggp/tggp02/pac_l.jpg
+  id: 74936874354
+parts:
+- type: tokyo_tube
+  movie_id: 13785
+  tags:
+  id: 74936865268
+- type: tokyo_tube
+  movie_id: 13979
+  tags:
+  id: 74936866677
+- type: tokyo_tube
+  movie_id: 14183
+  tags:
+  - 電マ
+  id: 74936867548
+- type: tokyo_tube
+  movie_id: 14271
+  tags:
+  - 電マ
+  id: 74936868363
+- type: tokyo_tube
+  movie_id: 14337
+  tags:
+  - 電マ
+  id: 74936869415
