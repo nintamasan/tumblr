@@ -78,6 +78,12 @@ class Video
     @parts
   end
 
+  def tags
+    config["parts"].each.with_object([]) do |part, ret|
+      ret.push(*part["tags"])
+    end
+  end
+
   def update_info!
     config["parts"].zip(parts).each do |original, part|
       original["id"] = part.id

@@ -38,6 +38,21 @@ class TumblerCLI < Thor
     Video.create_template(id)
   end
 
+  desc "list tags", "list and count tags"
+  def tags
+    # TODO: sampling
+    result = Video.video_configs.each.with_object(Hash.new(0)) do |video, result|
+      video.tags.each do |tag|
+        result[tag] = result[tag] + 1
+      end
+    end
+
+    # sort as b > a
+    result.sort {|a, b| b.last <=> a.last }.each do |tag, count|
+      puts "#{tag}: #{count}"
+    end
+  end
+
   protected
   def my_tumblr_host
     "av-part.tumblr.com"
